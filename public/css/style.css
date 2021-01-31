@@ -1,4 +1,223 @@
 * {
-    background-color: #c1a1d3;
-    font-family: "Helvetica neue";
+    box-sizing: border-box;
+    margin: 0;
+    /* background-color: #c1a1d3; */
+    font-family: "Catamaran", sans-serif;
+}
+
+body {
+    display: grid;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+
+    grid-template-rows: 10% 15% 1fr 5%;
+}
+
+header {
+    display: flex;
+    background: #80ffdb;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.brand-title {
+    -webkit-animation: brand-title 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+    animation: brand-title 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+.box-main-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+}
+
+h1 {
+    font-family: "Permanent Marker", cursive;
+    text-transform: capitalize;
+    font-size: 40px;
+}
+
+/* .hamburger-menu {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 10px;
+} */
+
+.upload-box {
+    background-color: white;
+    width: 20%;
+
+    /* margin-top: -563px; */
+    /* top: 0px;
+    right: 0px; */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    /* margin-bottom: 150px; */
+    /* background-color: #fceef5; */
+    background-color: #80ffdb;
+}
+
+.username,
+.title,
+.description {
+    height: 30px;
+    min-width: 80px;
+    font-size: 1em;
+    padding: 7px 11px;
+    margin: 5px 20px;
+    border: 1px solid black;
+    color: black;
+}
+.file {
+    /* border: 1px solid black;
+    background-color: white; */
+    color: black;
+}
+.username:focus,
+.title:focus,
+.description:focus,
+.file:focus {
+    font-family: "Catamaran", sans-serif;
+    outline: none;
+}
+
+.username:hover,
+.title:hover,
+.description:hover,
+.username:active,
+.title:active,
+.description:active,
+.username:focus,
+.title:focus,
+.description:focus {
+    color: white;
+}
+
+::-webkit-input-placeholder {
+    color: black;
+}
+
+.btn-upload {
+    width: 60px;
+    border: 1px solid black;
+    background-color: white;
+    color: black;
+}
+
+#main {
+    margin-top: 100px;
+}
+
+.row-img-container {
+    display: grid;
+    gap: 30px;
+    height: 50%;
+    grid-template-columns: 1fr 1fr 1fr;
+    max-width: 80vh;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+/* .row-img-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+} */
+
+.container-img-box {
+    padding: 7px;
+
+    background-color: white;
+    border: 1px solid black;
+}
+
+/* .container-img-box {
+        box-shadow: 3px 3px 3px #94959a;
+    transform: translate(-3px, -3px);
+    transition: all 0.05s;
+} */
+
+.container-img-box:hover {
+    box-shadow: 10px 5px 5px #a6a9b6;
+}
+
+.title-img {
+    /* background-color: white; */
+    font-family: "Catamaran", sans-serif;
+}
+
+.image-box img {
+    width: 325px;
+    height: 230px;
+    object-fit: cover;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-text {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.footer-heart {
+    color: #80ffdb;
+}
+
+@-webkit-keyframes brand-title {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+    40% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes brand-title {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+    40% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        grid-template-rows: 5% 10% 1fr 5%;
+    }
+    .container-img-box {
+        grid-column: 2 / 3;
+    }
+
+    .form-box {
+        display: flex;
+        flex-direction: column;
+        justify-items: baseline;
+    }
+
+    .username,
+    .title,
+    .description {
+        width: 300px;
+        background-color: #80ffdb;
+    }
 }

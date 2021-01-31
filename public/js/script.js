@@ -7,20 +7,7 @@
         data: {
             name: "Lucie",
             seen: true,
-            cities: [
-                // {
-                //     name: "Berlin",
-                //     country: "Germany",
-                // },
-                // {
-                //     name: "Guayaquil",
-                //     country: "Ecuador",
-                // },
-                // {
-                //     name: "Venice",
-                //     country: "Italy",
-                // },
-            ],
+            images: [],
         }, // data ends
 
         mounted: function () {
@@ -29,10 +16,10 @@
 
             var self = this;
 
-            axios.get("/cities").then(function (response) {
-                console.log("response from /cities: ", response.data);
+            axios.get("/welcome").then(function (response) {
+                console.log("response from /images: ", response.data);
                 // console.log("this inside axios: ", this);
-                self.cities = response.data;
+                self.images = response.data;
             });
 
             // OR
@@ -43,9 +30,17 @@
         },
 
         methods: {
-            myFunction: function () {
-                console.log("my function is running!");
-            },
+            loadMore: function () {},
         },
+
+        // methods: {
+        //     SortImages: function (response) {
+        //         let responseSort = response.rows;
+        //         let latestPublished = responseSort.sort((a, b) => {
+        //             return new Date(b.created_at) - new Date(a.created_at);
+        //         });
+        //         return latestPublished;
+        //     },
+        // },
     });
 })();
