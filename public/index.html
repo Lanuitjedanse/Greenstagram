@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>My Imageboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100&family=Permanent+Marker&display=swap" rel="stylesheet">
@@ -19,31 +20,26 @@
        
     </header>
 
+    <!-- This container is for vue -->
+    <div id="main">
 
-     <div class="upload-box">
+         <div class="upload-box">
          <!-- <div class="closing-menu"><p>X</p> </div> -->
 
             <form method="post" class="form-box">
-                
-                <!-- <label for="username">Username</label> -->
-                <input type='text' class="username" name='username' placeholder='Username' autocomplete='off'>
-                <!-- <label for="title">Title</label> -->
-                <input type='text' class="title" name='title' placeholder='Title' autocomplete='off'>
-                <!-- <label for="description">Description</label> -->
-                <input type='description' class="description" name='description' placeholder='Description' autocomplete='off'>
-                <!-- <label for="file ">File</label> -->
-                <input type="file" class="file" accept="image/*">
-                <button type="submit" class="btn-upload" value="Submit">Upload</button>
+            
+                <input v-model="username" type='text' class="username" name='username' placeholder='Username' autocomplete='off'>
+                <input v-model="title" type='text' class="title" name='title' placeholder='Title' autocomplete='off'>
+                <input v-model="description" type='description' class="description" name='description' placeholder='Description' autocomplete='off'>
+                <input @change="fileSelectHandler" type="file" class="file" accept="image/*" ref="fileInput">
+                <button @click.prevent="clickHandler" class="btn-upload">Upload</button>
 
             </form>
         </div>
-   
-    <!-- This container is for vue -->
-    <div id="main">
        
 
         <div class="row-img-container">
-            <div class="container-img-box" v-for="each in images">
+            <div class="container-img-box" v-for="each in images" :key="each.id">
                 <div class="image-box">
                     <img class="picture" :src=each.url :alt=each.description :imageid=each.id>
                     <p class="title-img">{{each.title}}</p>
@@ -51,12 +47,13 @@
             </div>
         </div>
 
-    </div>
-    <footer>
+          <footer>
         <p class="footer-text">Made with</p>
         <p class="footer-heart">&hearts;</p>
         <p class="footer-text">by Lucie Bellenger | 2021</p>
     </footer>
+    </div>
+  
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/script.js"></script>

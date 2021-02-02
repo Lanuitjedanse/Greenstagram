@@ -84,9 +84,16 @@ INSERT INTO images (url, username, title, description) VALUES (
     'Da Nang',
     'Vietnam'
 );
--- INSERT INTO images (url, username, title, description) VALUES (
---     '',
---     '',
---     '',
---     '<3'
--- );
+INSERT INTO images (url, username, title, description) VALUES (
+    'https://images.unsplash.com/photo-1586375063704-5ee4fb8b6edd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80',
+    'Shoeslover',
+    'Need money for shoes',
+    'LOL'
+);
+
+INSERT INTO images (url, username, title, description) VALUES (
+    'https://images.unsplash.com/photo-1602164945488-322a0e0a09e4?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=676&q=80',
+    'Suburbian',
+    'Buttes Chaumont',
+    'Sunny day in Paris'
+);
