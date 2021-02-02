@@ -10,18 +10,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="box-main-title">
-            <h1 class="brand-title">Greenstagram</h1>   
-           
-        </div>
-        <!-- <div class="hamburger-menu"><p>X</p> -->
-</div>   
+  
        
-    </header>
+   
 
     <!-- This container is for vue -->
     <div id="main">
+          <header>
+            <div class="box-main-title">
+                <h1 class="brand-title">Greenstagram</h1>   
+            </div>
+        
+    </header>
 
          <div class="upload-box">
          <!-- <div class="closing-menu"><p>X</p> </div> -->
@@ -39,20 +39,68 @@
        
 
         <div class="row-img-container">
-            <div class="container-img-box" v-for="each in images" :key="each.id">
+            <div class="container-img-box" @click="selectedPost = each.id" v-for="each in images" :key="each.id">
                 <div class="image-box">
-                    <img class="picture" :src=each.url :alt=each.description :imageid=each.id>
+                    <img class="picture" :src="each.url" :alt="each.description" :imageid="each.id">
                     <p class="title-img">{{each.title}}</p>
                 </div>
             </div>
         </div>
+        
+        <popup-modal
+        v-for="each in images"
+        v-if="selectedPost" 
+        :title="each.title" 
+        :description="each.description" 
+        :id="selectedPost"
+        :src="each.url"
+       
+        @close="closeModal">
+          
+        </popup-modal>
 
-          <footer>
-        <p class="footer-text">Made with</p>
-        <p class="footer-heart">&hearts;</p>
-        <p class="footer-text">by Lucie Bellenger | 2021</p>
-    </footer>
+        <footer>
+            <p class="footer-text">Made with</p>
+            <p class="footer-heart">&hearts;</p>
+            <p class="footer-text">by Lucie Bellenger | 2021</p>
+        </footer>
     </div>
+
+    <script type='text/x-template' id="modal">
+        <div class="overlay-bg" @click="closeModal">
+
+            <div class="overlay" @click.stop="">
+                <div class="close-btn">
+                    <p @click="closeModal">X</p>
+                </div>
+            
+                <div class="pop-image-box">
+                    <h2>{{image.title}}</h2>
+                    <img class="pic-popup" :src="image.url" :alt="image.description" :imageid="image.id">
+            
+                    <p>Description: {{image.description}}</p>
+                    <p>Posted on {{image.created_at}} by {{image.username}}</p>
+                </div>
+           
+                <div class="like-box">
+                    <button class="like-btn" @click="count++">Like</button> 
+                    <p class="num-likes">{{count}}</p>
+                </div>
+            </div>
+            
+        </div>
+    </script>
+
+          <!-- <popup-modal
+        v-for="each in images"
+        v-if="selectedPost" 
+        :title="each.title" 
+        :description="each.description" 
+        :id="selectedPost"
+        :src="each.url"
+        @close="closeModal">
+          
+        </popup-modal> -->
   
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>

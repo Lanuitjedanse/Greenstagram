@@ -19,3 +19,15 @@ module.exports.uploadImage = (url, username, title, description) => {
     const params = [url, username, title, description];
     return db.query(q, params);
 };
+
+module.exports.getInfoPopup = (id) => {
+    const q = `SELECT * FROM images WHERE id=$1`;
+    const params = [id];
+    return db.query(q, params);
+};
+
+// module.exports.getInfoPopup = (id) => {
+//     const q = `SELECT * FROM images WHERE id=$1`;
+//     const params = [id];
+//     return db.query(q, params);
+// };

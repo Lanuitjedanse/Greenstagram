@@ -33,13 +33,27 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
         db.uploadImage(fullUrl, username, title, description).then(
             ({ rows }) => {
                 // console.log("rows: ", rows);
-                res.json(rows[0]);
+                res.json({ success: true, data: rows[0] });
+                // res.json(rows[0]);
             }
         );
     } else {
         res.json({ success: false });
     }
 });
+
+app.get("/popup/:id", (req, res) => {
+    let { id } = req.params;
+    db.getInfoPopup(id)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("there was an error: ", err);
+        });
+});
+
+//make a get request to receive all data based on id of image
 
 app.get("/*", (req, res) => res.redirect("/"));
 
