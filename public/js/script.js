@@ -46,10 +46,14 @@
         props: ["id"],
         mounted: function () {
             var self = this;
+            // var imageId = this.id;
             axios
-                .get(`/comments/${this.imageId}`)
+                .get(`/comments/${this.id}`)
                 .then(function (response) {
+                    console.log("self.comments: ", self.comments);
+                    console.log("response.data: ", response.data);
                     self.comments = response.data;
+                    // getting empty array
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
@@ -72,7 +76,7 @@
                 axios
                     .post("/comments", commentObject)
                     .then(function (response) {
-                        self.comments.unshift(response.data);
+                        self.comments.unshift(response.data[0]);
                     })
                     .catch(function (err) {
                         console.log("error add comment axios: ", err);

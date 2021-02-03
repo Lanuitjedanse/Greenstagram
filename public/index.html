@@ -88,8 +88,8 @@
                     <button class="like-btn" @click="count++">&hearts; {{count}}</button> 
                 </div>
                 <div class="comment-modal-box">
-                    <comment-modal  :id="id" :username="username" 
-        :comment="comment" ></comment-modal>
+                    <comment-modal  :id="id" 
+         ></comment-modal>
                 </div>
                 
             </div>
@@ -105,7 +105,7 @@
                 <button @click="addComment">Submit comment</button>
                 <!-- <button>Delete picture</button> -->
                 <div class="all-comments" v-for="each in comments" :key="each.id">
-                    {{comments.comment}} by {{comments.username}} on {{each.created_at}}
+                    {{each.comment}} by {{each.username}} on {{each.created_at}}
                 </div>
             </form>
         </div>

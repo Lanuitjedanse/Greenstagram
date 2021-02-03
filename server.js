@@ -70,11 +70,13 @@ app.get("/loadmore/:smallestId", (req, res) => {
 
 app.get("/comments/:imageId", (req, res) => {
     console.log("I am the comment route");
-    let { id } = req.params;
+    let { imageId } = req.params;
+    console.log("id: ", imageId);
 
-    db.getAllComments(id)
+    db.getAllComments(imageId)
         .then(({ rows }) => {
             res.json(rows);
+            console.log("rows: ", rows);
         })
         .catch((err) => {
             console.log("error in get all coments: ", err);
