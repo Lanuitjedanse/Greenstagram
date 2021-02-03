@@ -8,14 +8,6 @@
             return {
                 count: 0,
                 image: [],
-                // userNamePop: "",
-                // titlePop: "",
-                // descriptionPop: "",
-                // images: [],
-                // username: "",
-                // title: "",
-                // description: "",
-                // title: "",
             };
         },
         props: ["title", "description", "id"],
@@ -27,8 +19,6 @@
             axios
                 .get(`/popup/${this.id}`)
                 .then(function (response) {
-                    // console.log("response from /images: ", response.data);
-                    // console.log("this inside axios: ", this);
                     self.image = response.data[0];
                 })
                 .catch(function (err) {
@@ -58,6 +48,7 @@
             description: "",
             file: null,
             selectedPost: null,
+            smallestId: "",
             errorMessage: "",
         }, // data ends
 
@@ -90,11 +81,23 @@
         //     loadMore: function () {},
         // },
         methods: {
-            // openModal: function () {
-            //     console.log("open modal");
-            //     this.selectedPost = this.id;
-            //     console.log("this.selectedPost: ", this.selectedPost);
-            // },
+            loadMore: function () {
+                var smallestId = this.images[this.images.length - 1].id;
+                // console.log(smallestId);
+                var self = this;
+                axios
+                    .get("/loadmore")
+                    .then(function (response) {
+                        for (var i = 0; i < response.data.length; i++) {
+                            self.images.push(response.data[i]);
+                        }
+                        // smallestId;
+                        // smallestId = self.images[self.images.length - 1].id;
+                    })
+                    .catch(function (err) {
+                        console.log("err in axios load more: ", err);
+                    });
+            },
             closeModal: function () {
                 console.log("I heard emit event and will close");
                 this.selectedPost = null;

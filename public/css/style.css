@@ -227,6 +227,16 @@ footer {
     justify-content: center;
 }
 
+.like-btn {
+    font-size: 18px;
+    border: none;
+    color: white;
+    background-color: transparent;
+}
+.like-btn:focus {
+    outline: none;
+}
+
 @-webkit-keyframes brand-title {
     0% {
         letter-spacing: -0.5em;

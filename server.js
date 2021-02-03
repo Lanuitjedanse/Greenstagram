@@ -53,6 +53,20 @@ app.get("/popup/:id", (req, res) => {
         });
 });
 
+app.get("/loadmore", (req, res) => {
+    let { smallestId } = req.params;
+    console.log("smallestid: ", smallestId);
+
+    // console.log("id: ", smallestId);
+    db.getMoreImages(smallestId)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("error in loading more results", err);
+        });
+});
+
 //make a get request to receive all data based on id of image
 
 app.get("/*", (req, res) => res.redirect("/"));

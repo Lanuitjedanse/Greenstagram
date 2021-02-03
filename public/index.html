@@ -31,7 +31,8 @@
                 <input v-model="username" type='text' class="username" name='username' placeholder='Username' autocomplete='off'>
                 <input v-model="title" type='text' class="title" name='title' placeholder='Title' autocomplete='off'>
                 <input v-model="description" type='description' class="description" name='description' placeholder='Description' autocomplete='off'>
-                <input @change="fileSelectHandler" type="file" class="file" accept="image/*" ref="fileInput">
+                
+               <input @change="fileSelectHandler" type="file" accept="image/*" ref="fileInput">
                 <button @click.prevent="clickHandler" class="btn-upload">Upload</button>
 
             </form>
@@ -46,6 +47,8 @@
                 </div>
             </div>
         </div>
+
+        <button class="more-btn" @click="loadMore">More</button>
         
         <popup-modal
         v-for="each in images"
@@ -83,8 +86,8 @@
                 </div>
            
                 <div class="like-box">
-                    <button class="like-btn" @click="count++">Like</button> 
-                    <p class="num-likes">{{count}}</p>
+                    <button class="like-btn" @click="count++">&hearts; {{count}}</button> 
+                   
                 </div>
             </div>
             
