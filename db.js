@@ -25,14 +25,14 @@ module.exports.getInfoPopup = (id) => {
     return db.query(q, params);
 };
 
-module.exports.getMoreImages = (lastId) => {
-    const q = `SELECT * FROM images
-        WHERE id < $1
-        ORDER BY id DESC
-        LIMIT 10`;
-    const params = [lastId];
-    return db.query(q, params);
-};
+// module.exports.getMoreImages = (lastId) => {
+//     const q = `SELECT * FROM images
+//         WHERE id < $1
+//         ORDER BY id DESC
+//         LIMIT 10`;
+//     const params = [lastId];
+//     return db.query(q, params);
+// };
 
 module.exports.getLastImageId = (lastId) => {
     const q = `SELECT url, title, id, (
@@ -42,7 +42,20 @@ module.exports.getLastImageId = (lastId) => {
   ) AS "lowestId" FROM images
   WHERE id < $1
   ORDER BY id DESC
-  LIMIT 10`;
+  LIMIT 9`;
     const params = [lastId];
+    return db.query(q, params);
+};
+
+module.exports.insertComment = (comment, username, imageId) => {
+    const q = `INSERT INTO comments (comment, username, image_id)
+    VALUES ($1, $2, $3) RETURNING *`;
+    const params = [comment, username, imageId];
+    return db.query(q, params);
+};
+
+module.exports.getAllComments = (imageId) => {
+    const q = `SELECT * FROM comments WHERE image_id = $1`;
+    const params = [imageId];
     return db.query(q, params);
 };

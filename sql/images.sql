@@ -9,28 +9,6 @@ CREATE TABLE images(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- INSERT INTO images (url, username, title, description) VALUES (
---     'https://s3.amazonaws.com/imageboard/jAVZmnxnZ-U95ap2-PLliFFF7TO0KqZm.jpg',
---     'funkychicken',
---     'Welcome to Spiced and the Future!',
---     'This photo brings back so many great memories.'
--- );
-
--- INSERT INTO images (url, username, title, description) VALUES (
---     'https://s3.amazonaws.com/imageboard/wg8d94G_HrWdq7bU_2wT6Y6F3zrX-kej.jpg',
---     'discoduck',
---     'Elvis',
---     'We can''t go on together with suspicious minds.'
--- );
-
--- INSERT INTO images (url, username, title, description) VALUES (
---     'https://images.unsplash.com/photo-1503149779833-1de50ebe5f8a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=675&q=80',
---     'discoduck',
---     'To be or not to be',
---     'That is the question.'
--- );
-
--- New images
 
 INSERT INTO images (url, username, title, description) VALUES (
     'https://images.unsplash.com/photo-1503149779833-1de50ebe5f8a?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=675&q=80',

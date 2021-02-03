@@ -53,17 +53,43 @@ app.get("/popup/:id", (req, res) => {
         });
 });
 
-app.get("/loadmore", (req, res) => {
+app.get("/loadmore/:smallestId", (req, res) => {
     let { smallestId } = req.params;
-    console.log("smallestid: ", smallestId);
+    // console.log("smallestid: ", smallestId);
 
     // console.log("id: ", smallestId);
-    db.getMoreImages(smallestId)
+    db.getLastImageId(smallestId)
+        .then(({ rows }) => {
+            res.json(rows);
+            // console.log("lowestid: ", rows[0].lowestId);
+        })
+        .catch((err) => {
+            console.log("error in loading more results", err);
+        });
+});
+
+app.get("/comments/:imageId", (req, res) => {
+    console.log("I am the comment route");
+    let { id } = req.params;
+
+    db.getAllComments(id)
         .then(({ rows }) => {
             res.json(rows);
         })
         .catch((err) => {
-            console.log("error in loading more results", err);
+            console.log("error in get all coments: ", err);
+        });
+});
+
+app.post("/comments", (req, res) => {
+    const { comment, username, id } = req.body;
+
+    db.insertComment(comment, username, id)
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("error in insert coment: ", err);
         });
 });
 

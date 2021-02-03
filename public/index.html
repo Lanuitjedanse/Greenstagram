@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <button class="more-btn" @click="loadMore">More</button>
+        <button class="more-btn" @click="loadMore" v-if="showBtn">More</button>
         
         <popup-modal
         v-for="each in images"
@@ -59,7 +59,6 @@
         :src="each.url"
        
         @close="closeModal">
-          
         </popup-modal>
 
         <footer>
@@ -87,23 +86,33 @@
            
                 <div class="like-box">
                     <button class="like-btn" @click="count++">&hearts; {{count}}</button> 
-                   
                 </div>
+                <div class="comment-modal-box">
+                    <comment-modal  :id="id" :username="username" 
+        :comment="comment" ></comment-modal>
+                </div>
+                
             </div>
             
         </div>
     </script>
 
-          <!-- <popup-modal
-        v-for="each in images"
-        v-if="selectedPost" 
-        :title="each.title" 
-        :description="each.description" 
-        :id="selectedPost"
-        :src="each.url"
-        @close="closeModal">
-          
-        </popup-modal> -->
+    <script type='text/x-template' id="comment">
+        <div class="comment-box">
+            <form>
+                <input v-model="username" type="text" name="username">
+                <input v-model="comment" type="text" name="comment">
+                <button @click="addComment">Submit comment</button>
+                <!-- <button>Delete picture</button> -->
+                <div class="all-comments" v-for="each in comments" :key="each.id">
+                    {{comments.comment}} by {{comments.username}} on {{each.created_at}}
+                </div>
+            </form>
+        </div>
+
+    </script>
+
+     
   
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>

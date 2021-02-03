@@ -8,13 +8,11 @@
             return {
                 count: 0,
                 image: [],
+                // comments: [],
             };
         },
         props: ["title", "description", "id"],
         mounted: function () {
-            console.log("component mounted: ", this.title);
-            console.log("component mounted: ", this.description);
-            console.log("component mounted: ", this.id);
             var self = this;
             axios
                 .get(`/popup/${this.id}`)
@@ -36,6 +34,54 @@
         },
     });
 
+    Vue.component("commentModal", {
+        template: "#comment",
+        data: function () {
+            return {
+                comments: [],
+                username: "",
+                comment: "",
+            };
+        },
+        props: ["id"],
+        mounted: function () {
+            var self = this;
+            axios
+                .get(`/comments/${this.imageId}`)
+                .then(function (response) {
+                    self.comments = response.data;
+                })
+                .catch(function (err) {
+                    console.log("error get welcome: ", err);
+                });
+        },
+        methods: {
+            // submitComment: function () {
+            //     this.$emit("add");
+            // },
+
+            addComment: function (e) {
+                e.preventDefault();
+                var self = this;
+                var commentObject = {
+                    username: this.username,
+                    comment: this.comment,
+                    created_at: this.created_at,
+                    id: this.id,
+                };
+                axios
+                    .post("/comments", commentObject)
+                    .then(function (response) {
+                        self.comments.unshift(response.data);
+                    })
+                    .catch(function (err) {
+                        console.log("error add comment axios: ", err);
+                    });
+            },
+        },
+        // },
+    });
+
     // console.log(btnUpload);
     new Vue({
         el: "#main",
@@ -50,49 +96,43 @@
             selectedPost: null,
             smallestId: "",
             errorMessage: "",
+            showBtn: true,
         }, // data ends
 
         mounted: function () {
-            // console.log("my vue instance has mounted");
-            console.log("this outside axios: ", this);
+            // console.log("this outside axios: ", this);
 
             var self = this;
 
             axios
                 .get("/welcome")
                 .then(function (response) {
-                    // console.log("response from /images: ", response.data);
-                    // console.log("this inside axios: ", this);
                     self.images = response.data;
                     console.log("self.images: ", self.images);
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
                 });
-
-            // OR
-            // axios.get("/cities").then((response) => {
-            //     console.log("response from /cities: ", response.data);
-            //     console.log("this inside axios: ", this);
-            // });
         },
 
-        // methods: {
-        //     loadMore: function () {},
-        // },
         methods: {
             loadMore: function () {
                 var smallestId = this.images[this.images.length - 1].id;
                 // console.log(smallestId);
                 var self = this;
                 axios
-                    .get("/loadmore")
+                    .get(`/loadmore/${smallestId}`)
                     .then(function (response) {
                         for (var i = 0; i < response.data.length; i++) {
                             self.images.push(response.data[i]);
+
+                            if (
+                                response.data[i].id ===
+                                response.data[0].lowestId
+                            ) {
+                                self.showBtn = false;
+                            }
                         }
-                        // smallestId;
-                        // smallestId = self.images[self.images.length - 1].id;
                     })
                     .catch(function (err) {
                         console.log("err in axios load more: ", err);
