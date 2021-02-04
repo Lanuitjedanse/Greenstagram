@@ -32,7 +32,8 @@
                 <input v-model="title" type='text' class="title" name='title' placeholder='Title' autocomplete='off'>
                 <input v-model="description" type='description' class="description" name='description' placeholder='Description' autocomplete='off'>
                 
-               <input @change="fileSelectHandler" type="file" accept="image/*" ref="fileInput">
+               <!-- <input @change="fileSelectHandler" type="file" accept="image/*" ref="fileInput"> -->
+               <label for="file">Choose a file<input @change="fileSelectHandler" type="file" name="file" accept="image/*" class="inputfile" ref="fileInput" id="file"></label>
                 <button @click.prevent="clickHandler" class="btn-upload">Upload</button>
 
             </form>
@@ -82,8 +83,8 @@
             
                 <div class="pop-image-box">
                     <h2>{{image.title}}</h2>
+                    <div class="border-fade"></div>
                     <img class="pic-popup" :src="image.url" :alt="image.description" :imageid="image.id">
-                     
                 </div>
            
                 <div class="like-box">

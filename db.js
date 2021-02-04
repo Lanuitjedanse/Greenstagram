@@ -59,3 +59,7 @@ module.exports.getAllComments = (imageId) => {
     const params = [imageId];
     return db.query(q, params);
 };
+
+// module.exports.likePicture = (imageId) => {
+//     const q = ``
+// }

@@ -51,6 +51,7 @@ app.get("/popup/:id", (req, res) => {
         })
         .catch((err) => {
             console.log("there was a get pop image/id: ", err);
+            res.json({ success: false });
         });
 });
 

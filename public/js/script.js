@@ -14,10 +14,15 @@
         props: ["title", "description", "id"],
         mounted: function () {
             var self = this;
+            // self.id = location.hash.slice(1);
             axios
                 .get(`/popup/${this.id}`)
                 .then(function (response) {
-                    self.image = response.data[0];
+                    if (response.data.length === 0) {
+                        self.$emit("close");
+                    } else {
+                        self.image = response.data[0];
+                    }
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
@@ -26,6 +31,8 @@
 
         watch: {
             selectedPost: function () {
+                var self = this;
+                // self.id = location.hash.slice(1);
                 axios
                     .get(`/popup/${this.id}`)
                     .then(function (response) {
@@ -59,14 +66,12 @@
         props: ["id"],
         mounted: function () {
             var self = this;
-            // var imageId = this.id;
+
+            // self.id = location.hash.slice(1);
             axios
                 .get(`/comments/${this.id}`)
                 .then(function (response) {
-                    console.log("self.comments: ", self.comments);
-                    console.log("response.data: ", response.data);
                     self.comments = response.data;
-                    // getting empty array
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
@@ -74,13 +79,17 @@
         },
         watch: {
             selectedPost: function () {
+                var self = this;
+                // self.id = location.hash.slice(1);
+
                 axios
                     .get(`/popup/${this.id}`)
                     .then(function (response) {
-                        self.image = response.data[0];
-
-                        if (self.selectedPost != response.data[0].id) {
+                        console.log("response: ", response);
+                        if (response.data.length === 0) {
                             self.$emit("close");
+                        } else {
+                            self.image = response.data[0];
                         }
                     })
                     .catch(function (err) {
@@ -89,10 +98,6 @@
             },
         },
         methods: {
-            // submitComment: function () {
-            //     this.$emit("add");
-            // },
-
             addComment: function (e) {
                 e.preventDefault();
                 var self = this;
@@ -106,21 +111,19 @@
                     .post("/comments", commentObject)
                     .then(function (response) {
                         self.comments.unshift(response.data[0]);
+                        self.username = "";
+                        self.comment = "";
                     })
                     .catch(function (err) {
                         console.log("error add comment axios: ", err);
                     });
             },
         },
-        // },
     });
 
-    // console.log(btnUpload);
     new Vue({
         el: "#main",
         data: {
-            // name: "Lucie",
-            // seen: true,
             images: [],
             username: "",
             title: "",
@@ -133,8 +136,6 @@
         }, // data ends
 
         mounted: function () {
-            // console.log("this outside axios: ", this);
-
             var self = this;
             addEventListener("hashchange", () => {
                 this.selectedPost = location.hash.slice(1);
@@ -151,23 +152,9 @@
                 });
         },
 
-        watch: {
-            selectedPost: function () {
-                axios
-                    .get(`/popup/${this.id}`)
-                    .then(function (response) {
-                        self.image = response.data[0];
-                    })
-                    .catch(function (err) {
-                        console.log("error get popup: ", err);
-                    });
-            },
-        },
-
         methods: {
             loadMore: function () {
                 var smallestId = this.images[this.images.length - 1].id;
-                // console.log(smallestId);
                 var self = this;
                 axios
                     .get(`/loadmore/${smallestId}`)
@@ -190,13 +177,11 @@
             closeModal: function () {
                 console.log("I heard emit event and will close");
                 var self = this;
-                // console.log("location hash: ", location.hash);
+
                 location.hash = "";
                 self.selectedPost = null;
             },
             clickHandler: function () {
-                // e.preventDefault(); // prevents form to reload page when button clicked
-                // console.log("this: ", this);
                 var self = this;
                 var fd = new FormData();
                 fd.append("title", this.title);
@@ -207,8 +192,6 @@
                 axios
                     .post("/upload", fd)
                     .then(function (response) {
-                        // console.log("response: ", response.data);
-                        // self.images = response.data;
                         if (response.data.success) {
                             self.images.unshift(response.data.data);
                             self.title = "";
@@ -226,19 +209,8 @@
             },
 
             fileSelectHandler: function (e) {
-                // console.log("e: ", e);
                 this.file = e.target.files[0];
             },
         },
-
-        // methods: {
-        //     SortImages: function (response) {
-        //         let responseSort = response.rows;
-        //         let latestPublished = responseSort.sort((a, b) => {
-        //             return new Date(b.created_at) - new Date(a.created_at);
-        //         });
-        //         return latestPublished;
-        //     },
-        // },
     });
 })();
