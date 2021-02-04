@@ -44,20 +44,19 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 
 app.get("/popup/:id", (req, res) => {
     let { id } = req.params;
+    console.log("id: ", id);
     db.getInfoPopup(id)
         .then(({ rows }) => {
             res.json(rows);
         })
         .catch((err) => {
-            console.log("there was an error: ", err);
+            console.log("there was a get pop image/id: ", err);
         });
 });
 
 app.get("/loadmore/:smallestId", (req, res) => {
     let { smallestId } = req.params;
-    // console.log("smallestid: ", smallestId);
 
-    // console.log("id: ", smallestId);
     db.getLastImageId(smallestId)
         .then(({ rows }) => {
             res.json(rows);
@@ -71,7 +70,7 @@ app.get("/loadmore/:smallestId", (req, res) => {
 app.get("/comments/:imageId", (req, res) => {
     console.log("I am the comment route");
     let { imageId } = req.params;
-    console.log("id: ", imageId);
+    // console.log("id: ", imageId);
 
     db.getAllComments(imageId)
         .then(({ rows }) => {

@@ -23,6 +23,19 @@
                     console.log("error get welcome: ", err);
                 });
         },
+
+        watch: {
+            selectedPost: function () {
+                axios
+                    .get(`/popup/${this.id}`)
+                    .then(function (response) {
+                        self.image = response.data[0];
+                    })
+                    .catch(function (err) {
+                        console.log("error get popup: ", err);
+                    });
+            },
+        },
         methods: {
             // increaseLikes: function () {
             //     this.count++;
@@ -58,6 +71,22 @@
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
                 });
+        },
+        watch: {
+            selectedPost: function () {
+                axios
+                    .get(`/popup/${this.id}`)
+                    .then(function (response) {
+                        self.image = response.data[0];
+
+                        if (self.selectedPost != response.data[0].id) {
+                            self.$emit("close");
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log("error get popup: ", err);
+                    });
+            },
         },
         methods: {
             // submitComment: function () {
@@ -97,7 +126,7 @@
             title: "",
             description: "",
             file: null,
-            selectedPost: null,
+            selectedPost: location.hash.slice(1),
             smallestId: "",
             errorMessage: "",
             showBtn: true,
@@ -107,6 +136,9 @@
             // console.log("this outside axios: ", this);
 
             var self = this;
+            addEventListener("hashchange", () => {
+                this.selectedPost = location.hash.slice(1);
+            });
 
             axios
                 .get("/welcome")
@@ -117,6 +149,19 @@
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
                 });
+        },
+
+        watch: {
+            selectedPost: function () {
+                axios
+                    .get(`/popup/${this.id}`)
+                    .then(function (response) {
+                        self.image = response.data[0];
+                    })
+                    .catch(function (err) {
+                        console.log("error get popup: ", err);
+                    });
+            },
         },
 
         methods: {
@@ -144,7 +189,10 @@
             },
             closeModal: function () {
                 console.log("I heard emit event and will close");
-                this.selectedPost = null;
+                var self = this;
+                // console.log("location hash: ", location.hash);
+                location.hash = "";
+                self.selectedPost = null;
             },
             clickHandler: function () {
                 // e.preventDefault(); // prevents form to reload page when button clicked

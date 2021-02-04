@@ -40,28 +40,19 @@ h1 {
 
 #main {
     display: grid;
-    grid-template-rows: 8% 7% 1fr 5%;
+    grid-template-rows: 8% 7% 1fr 2% 5%;
 }
-
-/* .hamburger-menu {
-    display: flex;
-    justify-content: flex-end;
-    margin: 10px 10px;
-} */
 
 .upload-box {
     background-color: white;
 
-    /* margin-top: -563px; */
-    /* top: 0px;
-    right: 0px; */
     grid-row: 2 / 3;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 30px;
+
     width: 100%;
-    /* margin-bottom: 100px; */
+
     background-color: #80ffdb;
 }
 
@@ -90,18 +81,6 @@ h1 {
     outline: none;
 }
 
-/* .username:hover,
-.title:hover,
-.description:hover,
-.username:active,
-.title:active,
-.description:active,
-.username:focus,
-.title:focus,
-.description:focus {
-    color: white;
-} */
-
 ::-webkit-input-placeholder {
     color: black;
 }
@@ -129,7 +108,8 @@ h1 {
     grid-template-columns: repeat(auto-fill, minmax(341px, 1fr));
     justify-content: center;
     justify-items: center;
-
+    margin-top: 70px;
+    margin-bottom: 50px;
     grid-auto-flow: row;
 }
 
@@ -161,11 +141,31 @@ h1 {
     object-fit: cover;
 }
 
+.more-btn-box {
+    grid-row: 4/5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.more-btn {
+    width: 10%;
+
+    background-color: #80ffdb;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+.more-btn {
+    outline: none;
+}
+
 footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    grid-row: 4/5;
+    grid-row: 5/6;
 }
 
 .footer-text {
@@ -175,7 +175,9 @@ footer {
 .footer-heart {
     color: #80ffdb;
 }
-
+h2 {
+    font-family: "Permanent Marker", cursive;
+}
 .overlay {
     position: fixed;
     background-color: black;
@@ -184,12 +186,9 @@ footer {
     bottom: 0;
     left: 0;
     padding: 10px;
-    /* display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; */
+    border-radius: 8px;
     width: 600px;
-    height: 600px;
+    height: 800px;
     z-index: 3;
     margin: auto;
     color: white;
@@ -207,6 +206,10 @@ footer {
 .close-btn {
     display: flex;
     justify-content: flex-end;
+}
+
+.x-btn {
+    font-family: "Permanent Marker", cursive;
 }
 
 .pop-image-box {
@@ -232,8 +235,54 @@ footer {
     border: none;
     color: white;
     background-color: transparent;
+    position: absolute;
+    bottom: 330px;
+    left: 450px;
 }
 .like-btn:focus {
+    outline: none;
+}
+.like-btn:active {
+    font-size: 21px;
+    color: #eda1c1;
+}
+.caption {
+    margin-top: 10px;
+}
+
+.comment-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.all-comments {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    font-size: 15px;
+    max-height: 100px;
+}
+
+.username-comment {
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 133px;
+    border: none;
+    border-radius: 5px;
+}
+
+.submit-btn {
+    margin-left: 5px;
+    border: none;
+    border-radius: 5px;
+}
+.username-comment:focus,
+.submit-btn:focus {
     outline: none;
 }
 

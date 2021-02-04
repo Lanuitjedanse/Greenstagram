@@ -40,16 +40,20 @@
        
 
         <div class="row-img-container">
-            <div class="container-img-box" @click="selectedPost = each.id" v-for="each in images" :key="each.id">
+            <div class="container-img-box" v-for="each in images" :key="each.id">
                 <div class="image-box">
+                    <a :href="'#' + each.id">
                     <img class="picture" :src="each.url" :alt="each.description" :imageid="each.id">
+                    </a>
                     <p class="title-img">{{each.title}}</p>
                 </div>
             </div>
         </div>
 
-        <button class="more-btn" @click="loadMore" v-if="showBtn">More</button>
-        
+        <div class="more-btn-box">
+            <button class="more-btn" @click="loadMore" v-if="showBtn">Load more</button>
+        </div>
+
         <popup-modal
         v-for="each in images"
         v-if="selectedPost" 
@@ -73,23 +77,22 @@
 
             <div class="overlay" @click.stop="">
                 <div class="close-btn">
-                    <p @click="closeModal">X</p>
+                    <p class="x-btn" @click="closeModal">x</p>
                 </div>
             
                 <div class="pop-image-box">
                     <h2>{{image.title}}</h2>
                     <img class="pic-popup" :src="image.url" :alt="image.description" :imageid="image.id">
-            
-                    <p>Description: {{image.description}}</p>
-                    <p>Posted on {{image.created_at}} by {{image.username}}</p>
+                     
                 </div>
            
                 <div class="like-box">
-                    <button class="like-btn" @click="count++">&hearts; {{count}}</button> 
+                   <p class="caption">{{image.description}} posted by {{image.username}} on {{image.created_at}}</p>
+                   <button class="like-btn" @click="count++">&hearts; {{count}}</button> 
+                    
                 </div>
                 <div class="comment-modal-box">
-                    <comment-modal  :id="id" 
-         ></comment-modal>
+                    <comment-modal  :id="id"></comment-modal>
                 </div>
                 
             </div>
@@ -98,16 +101,18 @@
     </script>
 
     <script type='text/x-template' id="comment">
-        <div class="comment-box">
-            <form>
-                <input v-model="username" type="text" name="username">
-                <input v-model="comment" type="text" name="comment">
-                <button @click="addComment">Submit comment</button>
-                <!-- <button>Delete picture</button> -->
-                <div class="all-comments" v-for="each in comments" :key="each.id">
-                    {{each.comment}} by {{each.username}} on {{each.created_at}}
+        <div class="comment-modal">
+                <div class="comment-box">
+                    <input class="username-comment" v-model="username" type="text" name="username" placeholder="Username">
+                    <input class="username-comment"v-model="comment" type="text" name="comment" placeholder="Comment">
+                    <button class="submit-btn"@click="addComment">Submit comment</button>
                 </div>
-            </form>
+                <!-- <button>Delete picture</button> -->
+                <div class="all-comments">
+                    <p v-for="each in comments" :key="each.id"> {{each.username}} posted {{each.comment}} on {{each.created_at}}</p>
+                   
+                </div>
+            
         </div>
 
     </script>
