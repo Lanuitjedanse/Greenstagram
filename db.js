@@ -7,7 +7,7 @@ const db = spicedPg(
 );
 
 module.exports.getImages = () => {
-    const q = `SELECT * FROM images ORDER BY id DESC LIMIT 9`;
+    const q = `SELECT * FROM images ORDER BY id DESC LIMIT 6`;
 
     return db.query(q);
 };
@@ -42,7 +42,7 @@ module.exports.getLastImageId = (lastId) => {
   ) AS "lowestId" FROM images
   WHERE id < $1
   ORDER BY id DESC
-  LIMIT 9`;
+  LIMIT 6`;
     const params = [lastId];
     return db.query(q, params);
 };
@@ -60,6 +60,28 @@ module.exports.getAllComments = (imageId) => {
     return db.query(q, params);
 };
 
-// module.exports.likePicture = (imageId) => {
-//     const q = ``
-// }
+// module.exports.deletePost = (imageId) => {
+//     const q = ` DELETE images
+//       FROM images
+//         INNER JOIN comments
+//         ON images.id=comments.image_id
+//      WHERE id = $1`;
+
+//     const params = [imageId];
+
+//     return db.query(q, params);
+// };
+
+// module.exports.deleteImage = (imageId) => {
+//     const q = `DELETE FROM images
+//     WHERE id = $1`;
+//     const params = [imageId];
+//     return db.query(q, params);
+// };
+
+// module.exports.deleteComment = (imageId) => {
+//     const q = `DELETE FROM comments
+//     WHERE image_id = $1`;
+//     const params = [imageId];
+//     return db.query(q, params);
+// };

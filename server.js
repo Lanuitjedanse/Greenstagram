@@ -30,14 +30,18 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 
     console.log("inside folder uploads");
     if (req.file) {
-        db.uploadImage(fullUrl, username, title, description).then(
-            ({ rows }) => {
+        db.uploadImage(fullUrl, username, title, description)
+            .then(({ rows }) => {
                 // console.log("rows: ", rows);
                 res.json({ success: true, data: rows[0] });
                 // res.json(rows[0]);
-            }
-        );
+            })
+            .catch((err) => {
+                console.log("file too big", err);
+                res.json({ success: false });
+            });
     } else {
+        console.log("file too big");
         res.json({ success: false });
     }
 });
@@ -94,6 +98,41 @@ app.post("/comments", (req, res) => {
             console.log("error in insert coment: ", err);
         });
 });
+
+// app.post("/delete", (req, res) => {
+//     const { id } = req.body;
+//     console.log("id: ", id);
+
+//     // db.deleteImage(id)
+//     //     .then(({ rows }) => {
+//     //         console.log("the file was deleted!");
+//     //         console.log("rows: ", rows);
+
+//     //         db.deleteComment(id)
+//     //             .then(({ rows }) => {
+//     //                 console.log("deleted comments");
+//     //                 res.json(rows);
+//     //             })
+//     //             .catch((err) => {
+//     //                 console.log("error in deleting the file! ", err);
+//     //                 res.json({ success: false });
+//     //             });
+//     //     })
+//     //     .catch((err) => {
+//     //         console.log("error in deleting file!", err);
+//     //         res.json({ success: false });
+//     //     });
+
+//     Promise.all([db.deleteComment(id), db.deleteImage(id)])
+//         .then(({ rows }) => {
+//             res.json(rows);
+//             console.log("file delete wohooo");
+//         })
+//         .catch((err) => {
+//             console.log("err in promise all : ", err);
+//             res.json({ success: false });
+//         });
+// });
 
 //make a get request to receive all data based on id of image
 

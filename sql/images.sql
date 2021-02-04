@@ -75,3 +75,11 @@ INSERT INTO images (url, username, title, description) VALUES (
     'Buttes Chaumont',
     'Sunny day in Paris'
 );
+
+INSERT INTO images (url, username, title, description) VALUES (
+    'https://images.unsplash.com/photo-1492693429561-1c283eb1b2e8?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+    'DonkeyKong',
+    'Wadi Musa, Jordan',
+    'cutie'
+);
+

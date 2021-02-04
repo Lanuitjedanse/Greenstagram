@@ -35,7 +35,7 @@
                <!-- <input @change="fileSelectHandler" type="file" accept="image/*" ref="fileInput"> -->
                <label for="file">Choose a file<input @change="fileSelectHandler" type="file" name="file" accept="image/*" class="inputfile" ref="fileInput" id="file"></label>
                 <button @click.prevent="clickHandler" class="btn-upload">Upload</button>
-
+                <p class="error-msg"v-if="errorMessage">{{errorMessage}}</p>
             </form>
         </div>
        
@@ -78,7 +78,7 @@
             
                 <div class="pop-image-box">
                     <h2>{{image.title}}</h2>
-                    <div class="border-fade"></div>
+                    <div class="layer-fade"></div>
                     <img class="pic-popup" :src="image.url" :alt="image.description" :imageid="image.id">
                 </div>
            
@@ -101,9 +101,10 @@
                 <div class="comment-box">
                     <input class="username-comment" v-model="username" type="text" name="username" placeholder="Username">
                     <input class="username-comment"v-model="comment" type="text" name="comment" placeholder="Comment">
-                    <button class="submit-btn"@click="addComment">Submit comment</button>
+                    <button class="submit-btn" @click="addComment">Submit comment</button>
+                    <!-- <button class="delete-btn" @click="deleteImage">Delete</button> -->
                 </div>
-                <!-- <button>Delete picture</button> -->
+               
                 <div class="all-comments">
                     <p v-for="each in comments" :key="each.id"> {{each.username}} posted {{each.comment}} on {{each.created_at}}</p>
                    

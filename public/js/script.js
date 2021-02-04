@@ -18,6 +18,9 @@
             axios
                 .get(`/popup/${this.id}`)
                 .then(function (response) {
+                    console.log("res.created_at: ", response.data[0]);
+                    // var dateOnly = response.data[0].created_at.slice(0, 10);
+
                     self.image = response.data[0];
                 })
                 .catch(function (err) {
@@ -71,6 +74,10 @@
             axios
                 .get(`/comments/${this.id}`)
                 .then(function (response) {
+                    console.log(
+                        "res.created_at: ",
+                        response.data[0].created_at
+                    );
                     self.comments = response.data;
                 })
                 .catch(function (err) {
@@ -85,7 +92,11 @@
                 axios
                     .get(`/comments/${this.id}`)
                     .then(function (response) {
-                        console.log("response: ", response);
+                        // console.log("response: ", response);
+                        console.log(
+                            "res.created_at: ",
+                            response.data[0].created_at
+                        );
                         self.comments = response.data;
                     })
                     .catch(function (err) {
@@ -114,6 +125,25 @@
                         console.log("error add comment axios: ", err);
                     });
             },
+
+            // deleteImage: function () {
+            //     this.selectedPost = null;
+            //     var self = this;
+
+            //     axios
+            //         .get("/delete", self.id)
+            //         .then(function () {
+            //             for (var i = 0; i < self.images.length; i++) {
+            //                 if (self.images[i].id === self.id) {
+            //                     self.images.splice(i, 1);
+            //                     break;
+            //                 }
+            //             }
+            //         })
+            //         .catch(function (err) {
+            //             console.log("err in delete image: ", err);
+            //         });
+            // },
         },
     });
 
@@ -127,7 +157,7 @@
             file: null,
             selectedPost: location.hash.slice(1),
             smallestId: "",
-            errorMessage: "",
+            errorMessage: false,
             showBtn: true,
         }, // data ends
 
@@ -175,6 +205,7 @@
                 var self = this;
 
                 location.hash = "";
+                window.history.replaceState({}, "", "/");
                 self.selectedPost = null;
             },
             clickHandler: function () {
@@ -189,18 +220,21 @@
                     .post("/upload", fd)
                     .then(function (response) {
                         if (response.data.success) {
+                            self.errorMessage = null;
                             self.images.unshift(response.data.data);
                             self.title = "";
                             self.description = "";
                             self.username = "";
                             self.$refs.fileInput.value = null;
                         } else {
-                            self.errorMessage = "There was an error";
+                            self.errorMessage = "File missing";
                             console.log("error");
                         }
                     })
                     .catch(function (err) {
                         console.log("error in post upload: ", err);
+                        self.errorMessage =
+                            "Fill out all the fields, or file is too large (max 2MB)";
                     });
             },
 
