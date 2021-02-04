@@ -44,7 +44,7 @@
             <div class="container-img-box" v-for="each in images" :key="each.id">
                 <div class="image-box">
                     <a :href="'#' + each.id">
-                    <img class="picture" :src="each.url" :alt="each.description" :imageid="each.id">
+                        <img class="picture" :src="each.url" :alt="each.description" :imageid="each.id">
                     </a>
                     <p class="title-img">{{each.title}}</p>
                 </div>
@@ -56,13 +56,8 @@
         </div>
 
         <popup-modal
-        v-for="each in images"
         v-if="selectedPost" 
-        :title="each.title" 
-        :description="each.description" 
         :id="selectedPost"
-        :src="each.url"
-       
         @close="closeModal">
         </popup-modal>
 

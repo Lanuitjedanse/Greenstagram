@@ -18,11 +18,7 @@
             axios
                 .get(`/popup/${this.id}`)
                 .then(function (response) {
-                    if (response.data.length === 0) {
-                        self.$emit("close");
-                    } else {
-                        self.image = response.data[0];
-                    }
+                    self.image = response.data[0];
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
@@ -30,13 +26,17 @@
         },
 
         watch: {
-            selectedPost: function () {
+            id: function () {
                 var self = this;
                 // self.id = location.hash.slice(1);
                 axios
                     .get(`/popup/${this.id}`)
                     .then(function (response) {
-                        self.image = response.data[0];
+                        if (response.data.length === 0) {
+                            self.$emit("close");
+                        } else {
+                            self.image = response.data[0];
+                        }
                     })
                     .catch(function (err) {
                         console.log("error get popup: ", err);
@@ -78,19 +78,15 @@
                 });
         },
         watch: {
-            selectedPost: function () {
+            id: function () {
                 var self = this;
                 // self.id = location.hash.slice(1);
 
                 axios
-                    .get(`/popup/${this.id}`)
+                    .get(`/comments/${this.id}`)
                     .then(function (response) {
                         console.log("response: ", response);
-                        if (response.data.length === 0) {
-                            self.$emit("close");
-                        } else {
-                            self.image = response.data[0];
-                        }
+                        self.comments = response.data;
                     })
                     .catch(function (err) {
                         console.log("error get popup: ", err);
