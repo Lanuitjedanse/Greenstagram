@@ -51,6 +51,19 @@ app.get("/popup/:id", (req, res) => {
     console.log("id: ", id);
     db.getInfoPopup(id)
         .then(({ rows }) => {
+            // let newDate = [];
+            // // console.log(rows[0].username);
+            // let dataDate = rows[0].created_at;
+            // // console.log("rows[0].created_at.slice(0, 10),", rows[0].created_at);
+            // let newDate = dataDate.slice(0, 10);
+            // // newDate.push({
+            // //     username: rows[0].username,
+            // //     comment: rows[0].comment,
+            // //     created_at: rows[0].created_at.slice(0, 10),
+            // //     id: rows[0].id,
+            // rows[0].created_at.replace(rows[0].created_at, newDate);
+            // // });
+            // console.log(newDate);
             res.json(rows);
         })
         .catch((err) => {
@@ -96,6 +109,36 @@ app.post("/comments", (req, res) => {
         })
         .catch((err) => {
             console.log("error in insert coment: ", err);
+        });
+});
+
+app.get("/likes/:imageId", (req, res) => {
+    // console.log("post like route");
+    const { imageId } = req.params;
+
+    db.countLikes(imageId)
+        .then(({ rows }) => {
+            console.log("rows in get likes: ", rows);
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("there was an error in get likes: ", err);
+        });
+});
+
+app.post("/likes/:imageId", (req, res) => {
+    const { imageId } = req.params;
+    console.log(imageId);
+
+    db.addLike(imageId)
+        .then(({ rows }) => {
+            // console.log("rows= ", rows);
+            console.log("a like was added to DB");
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("err in adding likes in DB: ", err);
+            res.json({ success: false });
         });
 });
 

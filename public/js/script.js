@@ -6,22 +6,25 @@
         template: "#modal",
         data: function () {
             return {
-                count: 0,
+                // count: 0,
                 image: [],
+                date: "",
+                likes: 0,
+
                 // comments: [],
             };
         },
         props: ["title", "description", "id"],
         mounted: function () {
+            this.getTotalLikes();
             var self = this;
             // self.id = location.hash.slice(1);
             axios
                 .get(`/popup/${this.id}`)
                 .then(function (response) {
-                    console.log("res.created_at: ", response.data[0]);
-                    // var dateOnly = response.data[0].created_at.slice(0, 10);
-
+                    self.date = response.data[0].created_at.slice(0, 10);
                     self.image = response.data[0];
+                    // self.created_at = response.data[0].created_at.slice(0, 10);
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
@@ -38,6 +41,10 @@
                         if (response.data.length === 0) {
                             self.$emit("close");
                         } else {
+                            self.date = response.data[0].created_at.slice(
+                                0,
+                                10
+                            );
                             self.image = response.data[0];
                         }
                     })
@@ -47,12 +54,32 @@
             },
         },
         methods: {
-            // increaseLikes: function () {
-            //     this.count++;
-            // },
+            increaseLikes: function () {
+                var self = this;
+                axios
+                    .post(`/likes/${self.id}`)
+                    .then(function () {
+                        self.likes++;
+                    })
+                    .catch(function (err) {
+                        console.log("error", err);
+                    });
+            },
             closeModal: function () {
                 console.log("close modal");
                 this.$emit("close");
+            },
+            getTotalLikes: function () {
+                var self = this;
+                axios
+                    .get(`/likes/${this.id}`)
+                    .then(function (response) {
+                        console.log(response.data);
+                        self.likes = response.data[0].count;
+                    })
+                    .catch(function (err) {
+                        console.log("error", err);
+                    });
             },
         },
     });
@@ -74,11 +101,21 @@
             axios
                 .get(`/comments/${this.id}`)
                 .then(function (response) {
-                    console.log(
-                        "res.created_at: ",
-                        response.data[0].created_at
-                    );
-                    self.comments = response.data;
+                    for (var i = 0; i < response.data.length; i++) {
+                        self.comments.unshift({
+                            comment: response.data[i].comment,
+                            created_at: response.data[i].created_at.slice(
+                                0,
+                                10
+                            ),
+                            id: response.data[i].id,
+                            image_id: response.data[i].image_id,
+                            username: response.data[i].username,
+                        });
+                    }
+                    // console.log("response.dat: ", response.data);
+                    // self.date = response.data.created_at.slice(0, 10);
+                    // self.comments = response.data;
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
@@ -93,11 +130,18 @@
                     .get(`/comments/${this.id}`)
                     .then(function (response) {
                         // console.log("response: ", response);
-                        console.log(
-                            "res.created_at: ",
-                            response.data[0].created_at
-                        );
-                        self.comments = response.data;
+                        for (var i = 0; i < response.data.length; i++) {
+                            self.comments.unshift({
+                                comment: response.data[i].comment,
+                                created_at: response.data[i].created_at.slice(
+                                    0,
+                                    10
+                                ),
+                                id: response.data[i].id,
+                                image_id: response.data[i].image_id,
+                                username: response.data[i].username,
+                            });
+                        }
                     })
                     .catch(function (err) {
                         console.log("error get popup: ", err);
@@ -117,7 +161,18 @@
                 axios
                     .post("/comments", commentObject)
                     .then(function (response) {
-                        self.comments.unshift(response.data[0]);
+                        for (var i = 0; i < response.data.length; i++) {
+                            self.comments.unshift({
+                                comment: response.data[i].comment,
+                                created_at: response.data[i].created_at.slice(
+                                    0,
+                                    10
+                                ),
+                                id: response.data[i].id,
+                                image_id: response.data[i].image_id,
+                                username: response.data[i].username,
+                            });
+                        }
                         self.username = "";
                         self.comment = "";
                     })
@@ -159,12 +214,15 @@
             smallestId: "",
             errorMessage: false,
             showBtn: true,
+            scrollPos: 0,
         }, // data ends
 
         mounted: function () {
             var self = this;
             addEventListener("hashchange", () => {
                 this.selectedPost = location.hash.slice(1);
+                console.log("offset Y: ", window.pageYOffset);
+                this.scrollPos = window.pageYOffset;
             });
 
             axios
@@ -205,6 +263,7 @@
                 var self = this;
 
                 location.hash = "";
+                window.scrollTo(0, self.scrollPos);
                 window.history.replaceState({}, "", "/");
                 self.selectedPost = null;
             },
@@ -235,6 +294,10 @@
                         console.log("error in post upload: ", err);
                         self.errorMessage =
                             "Fill out all the fields, or file is too large (max 2MB)";
+                        self.title = "";
+                        self.description = "";
+                        self.username = "";
+                        self.$refs.fileInput.value = null;
                     });
             },
 

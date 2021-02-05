@@ -85,3 +85,15 @@ module.exports.getAllComments = (imageId) => {
 //     const params = [imageId];
 //     return db.query(q, params);
 // };
+
+module.exports.addLike = (imageId) => {
+    const q = `INSERT INTO likes (image_id) VALUES ($1) RETURNING *`;
+    const params = [imageId];
+    return db.query(q, params);
+};
+
+module.exports.countLikes = (imageId) => {
+    const q = `SELECT COUNT (*) FROM likes WHERE image_id = $1`;
+    const params = [imageId];
+    return db.query(q, params);
+};

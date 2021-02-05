@@ -83,12 +83,13 @@
                 </div>
            
                 <div class="like-box">
-                   <p class="caption">{{image.description}} posted by {{image.username}} on {{image.created_at}}</p>
-                   <button class="like-btn" @click="count++">&hearts; {{count}}</button> 
+                   <p class="caption">{{image.description}} posted by {{image.username}} on {{date}}</p>
+                   <button class="like-btn" @click="increaseLikes">&hearts; {{likes}}</button> 
                     
                 </div>
                 <div class="comment-modal-box">
                     <comment-modal  :id="id"></comment-modal>
+                    <!-- <button class="delete-btn" @click="deleteImage">Delete</button> -->
                 </div>
                 
             </div>
