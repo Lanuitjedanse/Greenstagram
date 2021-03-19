@@ -215,10 +215,14 @@
             errorMessage: false,
             showBtn: true,
             scrollPos: 0,
+            likes: [],
         }, // data ends
 
         mounted: function () {
             var self = this;
+
+            this.getTotalLikes();
+
             addEventListener("hashchange", () => {
                 this.selectedPost = location.hash.slice(1);
                 console.log("offset Y: ", window.pageYOffset);
@@ -228,8 +232,15 @@
             axios
                 .get("/welcome")
                 .then(function (response) {
-                    self.images = response.data;
-                    console.log("self.images: ", self.images);
+                    console.log("response.data: ", response.data);
+                    let images = response.data.rowsImages;
+                    let likes = response.data.rowsLikes;
+                    let imagesAndLikes = images.map((image, i) => ({
+                        ...image,
+                        likes: likes[i].count,
+                    }));
+
+                    self.images = imagesAndLikes;
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
@@ -243,15 +254,22 @@
                 axios
                     .get(`/loadmore/${smallestId}`)
                     .then(function (response) {
-                        for (var i = 0; i < response.data.length; i++) {
-                            self.images.push(response.data[i]);
+                        let imagesAndLikes = response.data.images.map(
+                            (image, i) => ({
+                                ...image,
+                                likes: response.data.likes[i].count,
+                            })
+                        );
 
+                        for (var i = 0; i < imagesAndLikes.length; i++) {
                             if (
-                                response.data[i].id ===
-                                response.data[0].lowestId
+                                imagesAndLikes[i].id ===
+                                imagesAndLikes[0].lowestId
                             ) {
                                 self.showBtn = false;
                             }
+
+                            self.images.push(imagesAndLikes[i]);
                         }
                     })
                     .catch(function (err) {
@@ -298,6 +316,47 @@
                         self.description = "";
                         self.username = "";
                         self.$refs.fileInput.value = null;
+                    });
+            },
+
+            getTotalLikes: function () {
+                var self = this;
+                axios
+                    .get(`/likes`)
+                    .then(function (response) {
+                        for (var i = 0; i < response.data.length; i++) {
+                            self.likes.push({
+                                count: response.data[i].count,
+                                id: response.data[i].image_id,
+                            });
+                            console.log(
+                                "response.data: ",
+                                response.data[i].count
+                            );
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log("error", err);
+                    });
+            },
+
+            increaseLikes: function () {
+                var self = this;
+
+                // console.log("selectedpost: ", self.selectedPost);
+                console.log(self.id);
+                axios
+                    .post(`/likes/${this.imageId}`)
+                    .then(function (response) {
+                        console.log("selectedpost", self.selectedPost);
+                        console.log("elf.id: ", response.data[0]);
+                        // if (self.selectedPost === self.id) {
+                        //     self.likes++;
+                        // }
+                        self.likes++;
+                    })
+                    .catch(function (err) {
+                        console.log("error", err);
                     });
             },
 

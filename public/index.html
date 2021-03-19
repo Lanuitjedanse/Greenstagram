@@ -41,12 +41,15 @@
        
 
         <div class="row-img-container">
-            <div class="container-img-box" v-for="each in images" :key="each.id">
+            <div class="container-img-box" v-for="each in images" :key="each.id" >
                 <div class="image-box">
                     <a :href="'#' + each.id">
                         <img class="picture" :src="each.url" :alt="each.description" :imageid="each.id">
                     </a>
+                    <div class="title-like"  >
                     <p class="title-img">{{each.title}}</p>
+                    <!-- <p @click="increaseLikes">&hearts; {{each.likes}}</p> -->
+                    </div>
                 </div>
             </div>
         </div>

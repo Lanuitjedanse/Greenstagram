@@ -270,6 +270,7 @@ h2 {
 .like-btn:focus {
     outline: none;
 }
+
 .like-btn:active {
     font-size: 21px;
     color: #eda1c1;
@@ -312,6 +313,11 @@ h2 {
 .username-comment:focus,
 .submit-btn:focus {
     outline: none;
+}
+
+.title-like {
+    display: flex;
+    justify-content: space-between;
 }
 
 @-webkit-keyframes brand-title {

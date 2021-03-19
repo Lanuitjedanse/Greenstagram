@@ -3,9 +3,36 @@ const app = express();
 const db = require("./db");
 const s3 = require("./s3");
 const config = require("./config");
+const basicAuth = require("basic-auth");
 //middleware uploader
 const { uploader } = require("./upload");
 exports.app = app;
+
+let basicUser;
+let basicPass;
+if (process.env.NODE_ENV == "production") {
+    basicUser = process.env.basicUser;
+    basicPass = process.env.basicPass;
+} else {
+    const secrets = require("./secrets");
+    basicUser = secrets.basicUser;
+    basicPass = secrets.basicPass;
+}
+
+const auth = function (req, res, next) {
+    const creds = basicAuth(req);
+    if (!creds || creds.name != basicUser || creds.pass != basicPass) {
+        res.setHeader(
+            "WWW-Authenticate",
+            'Basic realm="Enter your credentials to see this stuff."'
+        );
+        res.sendStatus(401);
+    } else {
+        next();
+    }
+};
+
+app.use(auth);
 
 app.use(express.static("./public"));
 app.use(express.static("./uploads"));
@@ -13,15 +40,26 @@ app.use(express.json());
 
 /// middleware added
 
-app.get("/welcome", (req, res) => {
-    db.getImages()
-        .then(({ rows }) => {
-            return res.json(rows);
-        })
-        .catch((err) => {
-            console.log("err in get images: ", err);
-        });
+app.get("/welcome", async (req, res) => {
+    try {
+        const images = await db.getImages();
+        const likes = await db.getLikes();
+        console.log("images: ", images.rows);
+
+        res.json({ rowsImages: images.rows, rowsLikes: likes.rows });
+    } catch (err) {
+        console.log("err in welcome: ", err);
+    }
 });
+
+// db.getImages()
+//     .then(({ rows }) => {
+//         console.log("rows in welcome: ", rows);
+//         return;
+//     })
+//     .catch((err) => {
+//         console.log("err in get images: ", err);
+//     });
 
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     const { title, description, username } = req.body;
@@ -72,17 +110,16 @@ app.get("/popup/:id", (req, res) => {
         });
 });
 
-app.get("/loadmore/:smallestId", (req, res) => {
+app.get("/loadmore/:smallestId", async (req, res) => {
     let { smallestId } = req.params;
-
-    db.getLastImageId(smallestId)
-        .then(({ rows }) => {
-            res.json(rows);
-            // console.log("lowestid: ", rows[0].lowestId);
-        })
-        .catch((err) => {
-            console.log("error in loading more results", err);
-        });
+    try {
+        const images = await db.getLastImageId(smallestId);
+        const likes = await db.getAllTotalLikes();
+        console.log("likes: ", likes);
+        res.json({ images: images.rows, likes: likes.rows });
+    } catch (err) {
+        console.log("err in loadmore: ", err);
+    }
 });
 
 app.get("/comments/:imageId", (req, res) => {
@@ -115,6 +152,7 @@ app.post("/comments", (req, res) => {
 app.get("/likes/:imageId", (req, res) => {
     // console.log("post like route");
     const { imageId } = req.params;
+    console.log("imageId: ", imageId);
 
     db.countLikes(imageId)
         .then(({ rows }) => {
@@ -142,6 +180,18 @@ app.post("/likes/:imageId", (req, res) => {
         });
 });
 
+app.get("/likes", (req, res) => {
+    // console.log("imageId: ", imageId);
+
+    db.getAllTotalLikes()
+        .then(({ rows }) => {
+            console.log("rows in get likes: ", rows);
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("there was an error in get likes: ", err);
+        });
+});
 // app.post("/delete", (req, res) => {
 //     const { id } = req.body;
 //     console.log("id: ", id);
@@ -181,4 +231,8 @@ app.post("/likes/:imageId", (req, res) => {
 
 app.get("/*", (req, res) => res.redirect("/"));
 
-app.listen(8080, () => console.log("IB server is listening..."));
+if (require.main == module) {
+    app.listen(process.env.PORT || 8080, () => {
+        console.log("Server is listening...");
+    });
+}
