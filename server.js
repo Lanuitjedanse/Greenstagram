@@ -43,10 +43,11 @@ app.use(express.json());
 app.get("/welcome", async (req, res) => {
     try {
         const images = await db.getImages();
-        const likes = await db.getLikes();
-        console.log("images: ", images.rows);
+        // const likes = await db.getLikes();
+        // console.log("images: ", images.rows);
 
-        res.json({ rowsImages: images.rows, rowsLikes: likes.rows });
+        // res.json({ rowsImages: images.rows, rowsLikes: likes.rows });
+        res.json(images);
     } catch (err) {
         console.log("err in welcome: ", err);
     }

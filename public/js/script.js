@@ -233,14 +233,15 @@
                 .get("/welcome")
                 .then(function (response) {
                     console.log("response.data: ", response.data);
-                    let images = response.data.rowsImages;
-                    let likes = response.data.rowsLikes;
-                    let imagesAndLikes = images.map((image, i) => ({
-                        ...image,
-                        likes: likes[i].count,
-                    }));
+                    // let images = response.data.rowsImages;
+                    // let likes = response.data.rowsLikes;
+                    // let imagesAndLikes = images.map((image, i) => ({
+                    //     ...image,
+                    //     likes: likes[i].count,
+                    // }));
 
-                    self.images = imagesAndLikes;
+                    // self.images = imagesAndLikes;
+                    self.images = response.data.rowsImages;
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
@@ -254,22 +255,22 @@
                 axios
                     .get(`/loadmore/${smallestId}`)
                     .then(function (response) {
-                        let imagesAndLikes = response.data.images.map(
-                            (image, i) => ({
-                                ...image,
-                                likes: response.data.likes[i].count,
-                            })
-                        );
+                        // let imagesAndLikes = response.data.images.map(
+                        //     (image, i) => ({
+                        //         ...image,
+                        //         likes: response.data.likes[i].count,
+                        //     })
+                        // );
 
-                        for (var i = 0; i < imagesAndLikes.length; i++) {
+                        for (var i = 0; i < response.data.images.length; i++) {
                             if (
-                                imagesAndLikes[i].id ===
-                                imagesAndLikes[0].lowestId
+                                response.data.images[i].id ===
+                                response.data.images[0].lowestId
                             ) {
                                 self.showBtn = false;
                             }
 
-                            self.images.push(imagesAndLikes[i]);
+                            self.images.push(response.data.images[i]);
                         }
                     })
                     .catch(function (err) {
