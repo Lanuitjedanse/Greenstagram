@@ -369,7 +369,7 @@ h2 {
     }
 }
 
-@media screen and (min-width: 376px) and (max-width: 750px) {
+@media screen and (min-width: 300px) and (max-width: 750px) {
     .more-btn {
         align-items: flex-start;
     }
