@@ -47,7 +47,7 @@ app.get("/welcome", async (req, res) => {
         // console.log("images: ", images.rows);
 
         // res.json({ rowsImages: images.rows, rowsLikes: likes.rows });
-        res.json(images);
+        res.json({ images: images.rows });
     } catch (err) {
         console.log("err in welcome: ", err);
     }
@@ -115,9 +115,10 @@ app.get("/loadmore/:smallestId", async (req, res) => {
     let { smallestId } = req.params;
     try {
         const images = await db.getLastImageId(smallestId);
-        const likes = await db.getAllTotalLikes();
-        console.log("likes: ", likes);
-        res.json({ images: images.rows, likes: likes.rows });
+        // const likes = await db.getAllTotalLikes();
+        // console.log("likes: ", likes);
+        // res.json({ images: images.rows, likes: likes.rows });
+        res.json({ images: images.rows });
     } catch (err) {
         console.log("err in loadmore: ", err);
     }
