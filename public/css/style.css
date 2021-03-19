@@ -423,7 +423,7 @@ h2 {
     }
 }
 
-@media screen and (min-width: 500px) and (max-width: 800px) {
+@media screen and (min-width: 500px) and (max-width: 750px) {
     .like-btn {
         padding: 5px;
         position: static;
