@@ -241,7 +241,7 @@
                     // }));
 
                     // self.images = imagesAndLikes;
-                    self.images = response.data.rowsImages;
+                    self.images = response.data.images;
                 })
                 .catch(function (err) {
                     console.log("error get welcome: ", err);
