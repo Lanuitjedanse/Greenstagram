@@ -401,8 +401,9 @@ h2 {
     }
 
     .like-btn {
-        bottom: 38.5%;
-        left: 84%;
+        padding: 5px;
+        position: static;
+        color: black;
     }
 
     .overlay {
@@ -418,16 +419,15 @@ h2 {
     }
 
     .layer-fade {
-        width: 90vw;
-        bottom: 39%;
-        border-radius: 0px 0px 5px 5px;
+        visibility: hidden;
     }
 }
 
 @media screen and (min-width: 500px) and (max-width: 800px) {
     .like-btn {
-        left: 90%;
-        bottom: 38.5%;
+        padding: 5px;
+        position: static;
+        color: black;
     }
 
     .pic-popup {
@@ -436,7 +436,6 @@ h2 {
     }
 
     .layer-fade {
-        width: 95vw;
-        bottom: 39%;
+        visibility: hidden;
     }
 }
