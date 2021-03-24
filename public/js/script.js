@@ -17,6 +17,7 @@
         props: ["title", "description", "id"],
         mounted: function () {
             this.getTotalLikes();
+
             var self = this;
             // self.id = location.hash.slice(1);
             axios
@@ -79,6 +80,19 @@
                     })
                     .catch(function (err) {
                         console.log("error", err);
+                    });
+            },
+            deletePost: function (id) {
+                let self = this;
+
+                axios
+                    .post(`/delete/${id}`)
+                    .then(function () {
+                        self.$emit("delete", id);
+                        self.$emit("close");
+                    })
+                    .catch(function (err) {
+                        console.log("err in post delete: ", err);
                     });
             },
         },
@@ -261,16 +275,15 @@
                         //         likes: response.data.likes[i].count,
                         //     })
                         // );
+                        for (var i = 0; i < response.data.length; i++) {
+                            self.images.push(response.data[i]);
 
-                        for (var i = 0; i < response.data.images.length; i++) {
                             if (
-                                response.data.images[i].id ===
-                                response.data.images[0].lowestId
+                                response.data[i].id ===
+                                response.data[0].lowestId
                             ) {
                                 self.showBtn = false;
                             }
-
-                            self.images.push(response.data.images[i]);
                         }
                     })
                     .catch(function (err) {
@@ -349,8 +362,8 @@
                 axios
                     .post(`/likes/${this.imageId}`)
                     .then(function (response) {
-                        console.log("selectedpost", self.selectedPost);
-                        console.log("elf.id: ", response.data[0]);
+                        // console.log("selectedpost", self.selectedPost);
+                        // console.log("elf.id: ", response.data[0]);
                         // if (self.selectedPost === self.id) {
                         //     self.likes++;
                         // }
@@ -359,6 +372,19 @@
                     .catch(function (err) {
                         console.log("error", err);
                     });
+            },
+
+            deletePost: function (id) {
+                var self = this;
+                console.log("id: ", id);
+                // self.imageId;
+                console.log("this.id: ", id);
+                console.log(self.images[0].id);
+
+                const found = self.images.find((element) => element.id == id);
+                // console.log("found: ", self.images.indexOf(found));
+
+                self.images.splice(self.images.indexOf(found), 1);
             },
 
             fileSelectHandler: function (e) {

@@ -113,15 +113,24 @@ app.get("/popup/:id", (req, res) => {
 
 app.get("/loadmore/:smallestId", async (req, res) => {
     let { smallestId } = req.params;
-    try {
-        const images = await db.getLastImageId(smallestId);
-        // const likes = await db.getAllTotalLikes();
-        // console.log("likes: ", likes);
-        // res.json({ images: images.rows, likes: likes.rows });
-        res.json({ images: images.rows });
-    } catch (err) {
-        console.log("err in loadmore: ", err);
-    }
+    // try {
+    //     const images = await db.getLastImageId(smallestId);
+    //     // const likes = await db.getAllTotalLikes();
+    //     // console.log("likes: ", likes);
+    //     // res.json({ images: images.rows, likes: likes.rows });
+    //     res.json({ images: images.rows });
+    // } catch (err) {
+    //     console.log("err in loadmore: ", err);
+    // }
+
+    db.getLastImageId(smallestId)
+        .then(({ rows }) => {
+            res.json(rows);
+            // console.log("lowestid: ", rows[0].lowestId);
+        })
+        .catch((err) => {
+            console.log("error in loading more results", err);
+        });
 });
 
 app.get("/comments/:imageId", (req, res) => {
@@ -193,6 +202,28 @@ app.get("/likes", (req, res) => {
         .catch((err) => {
             console.log("there was an error in get likes: ", err);
         });
+});
+
+app.post("/delete/:imageId", async (req, res) => {
+    const { imageId } = req.params;
+    console.log(imageId);
+
+    try {
+        // const selectPost = await db.selectPost(imageId);
+
+        // if (selectPost.rows[0].url) {
+        //     s3.deleteImage(selectPost.rows[0].url);
+        // }
+
+        const likes = await db.deleteLikes(imageId);
+        const comments = await db.deleteComments(imageId);
+
+        const image = await db.deletePost(imageId);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.log("err in delete images: ", err);
+    }
 });
 // app.post("/delete", (req, res) => {
 //     const { id } = req.body;

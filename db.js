@@ -121,3 +121,27 @@ module.exports.getLikes = () => {
             ORDER BY image_id  DESC LIMIT 6`;
     return db.query(q);
 };
+
+module.exports.deletePost = (postId) => {
+    const q = `DELETE FROM images WHERE id = $1`;
+    const params = [postId];
+    return db.query(q, params);
+};
+
+module.exports.deleteComments = (postId) => {
+    const q = `DELETE FROM comments WHERE image_id = $1`;
+    const params = [postId];
+    return db.query(q, params);
+};
+
+module.exports.deleteLikes = (postId) => {
+    const q = `DELETE FROM likes WHERE image_id = $1`;
+    const params = [postId];
+    return db.query(q, params);
+};
+
+module.exports.selectPost = (postId) => {
+    const q = `SELECT * FROM images WHERE id = $1`;
+    const params = [postId];
+    return db.query(q, params);
+};

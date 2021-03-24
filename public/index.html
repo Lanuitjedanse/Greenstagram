@@ -48,6 +48,7 @@
                     </a>
                     <div class="title-like"  >
                     <p class="title-img">{{each.title}}</p>
+                    
                     <!-- <p @click="increaseLikes">&hearts; {{each.likes}}</p> -->
                     </div>
                 </div>
@@ -61,7 +62,8 @@
         <popup-modal
         v-if="selectedPost" 
         :id="selectedPost"
-        @close="closeModal">
+        @close="closeModal"
+        @delete="deletePost($event)">
         </popup-modal>
 
         <footer>
@@ -88,6 +90,7 @@
                 <div class="like-box">
                    <p class="caption">{{image.description}} posted by {{image.username}} on {{date}}</p>
                    <button class="like-btn" @click="increaseLikes">&hearts; {{likes}}</button> 
+                   <button @click="deletePost(id)">Delete</button>
                     
                 </div>
                 <div class="comment-modal-box">

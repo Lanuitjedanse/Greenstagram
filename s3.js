@@ -42,4 +42,20 @@ exports.upload = (req, res, next) => {
             // uh oh
             console.log(err);
         });
+
+    exports.deleteImage = (filename) => {
+        // console.log("filename", filename);
+        s3.deleteObject({
+            Bucket: "lucie-imageboard",
+            Key: filename.substr(42),
+        })
+            .promise()
+            .then((response) => {
+                console.log("delete successfull:", response);
+                next();
+            })
+            .catch((err) => {
+                console.log("err deleting image:", err);
+            });
+    };
 };
