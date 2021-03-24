@@ -376,14 +376,7 @@
 
             deletePost: function (id) {
                 var self = this;
-                console.log("id: ", id);
-                // self.imageId;
-                console.log("this.id: ", id);
-                console.log(self.images[0].id);
-
                 const found = self.images.find((element) => element.id == id);
-                // console.log("found: ", self.images.indexOf(found));
-
                 self.images.splice(self.images.indexOf(found), 1);
             },
 
