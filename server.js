@@ -11,25 +11,25 @@ exports.app = app;
 let basicUser;
 let basicPass;
 if (process.env.NODE_ENV == "production") {
-    basicUser = process.env.basicUser;
-    basicPass = process.env.basicPass;
+  basicUser = process.env.basicUser;
+  basicPass = process.env.basicPass;
 } else {
-    const secrets = require("./secrets");
-    basicUser = secrets.basicUser;
-    basicPass = secrets.basicPass;
+  const secrets = require("./secrets");
+  basicUser = secrets.basicUser;
+  basicPass = secrets.basicPass;
 }
 
 const auth = function (req, res, next) {
-    const creds = basicAuth(req);
-    if (!creds || creds.name != basicUser || creds.pass != basicPass) {
-        res.setHeader(
-            "WWW-Authenticate",
-            'Basic realm="Enter your credentials to see this stuff."'
-        );
-        res.sendStatus(401);
-    } else {
-        next();
-    }
+  const creds = basicAuth(req);
+  if (!creds || creds.name != basicUser || creds.pass != basicPass) {
+    res.setHeader(
+      "WWW-Authenticate",
+      'Basic realm="Enter your credentials to see this stuff."'
+    );
+    res.sendStatus(401);
+  } else {
+    next();
+  }
 };
 
 app.use(auth);
@@ -41,189 +41,133 @@ app.use(express.json());
 /// middleware added
 
 app.get("/welcome", async (req, res) => {
-    try {
-        const images = await db.getImages();
-        // const likes = await db.getLikes();
-        // console.log("images: ", images.rows);
+  try {
+    const images = await db.getImages();
 
-        // res.json({ rowsImages: images.rows, rowsLikes: likes.rows });
-        res.json({ images: images.rows });
-    } catch (err) {
-        console.log("err in welcome: ", err);
-    }
+    res.json({ images: images.rows });
+  } catch (err) {
+    console.log("err in welcome: ", err);
+  }
 });
 
-// db.getImages()
-//     .then(({ rows }) => {
-//         console.log("rows in welcome: ", rows);
-//         return;
-//     })
-//     .catch((err) => {
-//         console.log("err in get images: ", err);
-//     });
-
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
-    const { title, description, username } = req.body;
-    const { filename } = req.file;
-    const fullUrl = config.s3Url + filename;
+  const { title, description, username } = req.body;
+  const { filename } = req.file;
+  const fullUrl = config.s3Url + filename;
 
-    console.log("inside folder uploads");
-    if (req.file) {
-        db.uploadImage(fullUrl, username, title, description)
-            .then(({ rows }) => {
-                // console.log("rows: ", rows);
-                res.json({ success: true, data: rows[0] });
-                // res.json(rows[0]);
-            })
-            .catch((err) => {
-                console.log("file too big", err);
-                res.json({ success: false });
-            });
-    } else {
-        console.log("file too big");
+  if (req.file) {
+    db.uploadImage(fullUrl, username, title, description)
+      .then(({ rows }) => {
+        res.json({ success: true, data: rows[0] });
+      })
+      .catch((err) => {
+        console.log("file too big", err);
         res.json({ success: false });
-    }
+      });
+  } else {
+    console.log("file too big");
+    res.json({ success: false });
+  }
 });
 
 app.get("/popup/:id", (req, res) => {
-    let { id } = req.params;
-    console.log("id: ", id);
-    db.getInfoPopup(id)
-        .then(({ rows }) => {
-            // let newDate = [];
-            // // console.log(rows[0].username);
-            // let dataDate = rows[0].created_at;
-            // // console.log("rows[0].created_at.slice(0, 10),", rows[0].created_at);
-            // let newDate = dataDate.slice(0, 10);
-            // // newDate.push({
-            // //     username: rows[0].username,
-            // //     comment: rows[0].comment,
-            // //     created_at: rows[0].created_at.slice(0, 10),
-            // //     id: rows[0].id,
-            // rows[0].created_at.replace(rows[0].created_at, newDate);
-            // // });
-            // console.log(newDate);
-            res.json(rows);
-        })
-        .catch((err) => {
-            console.log("there was a get pop image/id: ", err);
-            res.json({ success: false });
-        });
+  let { id } = req.params;
+
+  db.getInfoPopup(id)
+    .then(({ rows }) => {
+      res.json(rows);
+    })
+    .catch((err) => {
+      console.log("there was a get pop image/id: ", err);
+      res.json({ success: false });
+    });
 });
 
 app.get("/loadmore/:smallestId", async (req, res) => {
-    let { smallestId } = req.params;
-    // try {
-    //     const images = await db.getLastImageId(smallestId);
-    //     // const likes = await db.getAllTotalLikes();
-    //     // console.log("likes: ", likes);
-    //     // res.json({ images: images.rows, likes: likes.rows });
-    //     res.json({ images: images.rows });
-    // } catch (err) {
-    //     console.log("err in loadmore: ", err);
-    // }
+  let { smallestId } = req.params;
 
-    db.getLastImageId(smallestId)
-        .then(({ rows }) => {
-            res.json(rows);
-            // console.log("lowestid: ", rows[0].lowestId);
-        })
-        .catch((err) => {
-            console.log("error in loading more results", err);
-        });
+  db.getLastImageId(smallestId)
+    .then(({ rows }) => {
+      res.json(rows);
+    })
+    .catch((err) => {
+      console.log("error in loading more results", err);
+    });
 });
 
 app.get("/comments/:imageId", (req, res) => {
-    console.log("I am the comment route");
-    let { imageId } = req.params;
-    // console.log("id: ", imageId);
+  console.log("I am the comment route");
+  let { imageId } = req.params;
 
-    db.getAllComments(imageId)
-        .then(({ rows }) => {
-            res.json(rows);
-            console.log("rows: ", rows);
-        })
-        .catch((err) => {
-            console.log("error in get all coments: ", err);
-        });
+  db.getAllComments(imageId)
+    .then(({ rows }) => {
+      res.json(rows);
+    })
+    .catch((err) => {
+      console.log("error in get all coments: ", err);
+    });
 });
 
 app.post("/comments", (req, res) => {
-    const { comment, username, id } = req.body;
+  const { comment, username, id } = req.body;
 
-    db.insertComment(comment, username, id)
-        .then(({ rows }) => {
-            res.json(rows);
-        })
-        .catch((err) => {
-            console.log("error in insert coment: ", err);
-        });
+  db.insertComment(comment, username, id)
+    .then(({ rows }) => {
+      res.json(rows);
+    })
+    .catch((err) => {
+      console.log("error in insert coment: ", err);
+    });
 });
 
 app.get("/likes/:imageId", (req, res) => {
-    // console.log("post like route");
-    const { imageId } = req.params;
-    console.log("imageId: ", imageId);
+  const { imageId } = req.params;
 
-    db.countLikes(imageId)
-        .then(({ rows }) => {
-            console.log("rows in get likes: ", rows);
-            res.json(rows);
-        })
-        .catch((err) => {
-            console.log("there was an error in get likes: ", err);
-        });
+  db.countLikes(imageId)
+    .then(({ rows }) => {
+      res.json(rows);
+    })
+    .catch((err) => {
+      console.log("there was an error in get likes: ", err);
+    });
 });
 
 app.post("/likes/:imageId", (req, res) => {
-    const { imageId } = req.params;
-    console.log(imageId);
+  const { imageId } = req.params;
 
-    db.addLike(imageId)
-        .then(({ rows }) => {
-            // console.log("rows= ", rows);
-            console.log("a like was added to DB");
-            res.json(rows);
-        })
-        .catch((err) => {
-            console.log("err in adding likes in DB: ", err);
-            res.json({ success: false });
-        });
+  db.addLike(imageId)
+    .then(({ rows }) => {
+      res.json(rows);
+    })
+    .catch((err) => {
+      console.log("err in adding likes in DB: ", err);
+      res.json({ success: false });
+    });
 });
 
 app.get("/likes", (req, res) => {
-    // console.log("imageId: ", imageId);
-
-    db.getAllTotalLikes()
-        .then(({ rows }) => {
-            console.log("rows in get likes: ", rows);
-            res.json(rows);
-        })
-        .catch((err) => {
-            console.log("there was an error in get likes: ", err);
-        });
+  db.getAllTotalLikes()
+    .then(({ rows }) => {
+      res.json(rows);
+    })
+    .catch((err) => {
+      console.log("there was an error in get likes: ", err);
+    });
 });
 
 app.post("/delete/:imageId", async (req, res) => {
-    const { imageId } = req.params;
-    console.log(imageId);
+  const { imageId } = req.params;
 
-    try {
-        // const selectPost = await db.selectPost(imageId);
+  try {
+    const likes = await db.deleteLikes(imageId);
+    const comments = await db.deleteComments(imageId);
 
-        // if (selectPost.rows[0].url) {
-        //     s3.deleteImage(selectPost.rows[0].url);
-        // }
+    const image = await db.deletePost(imageId);
 
-        const likes = await db.deleteLikes(imageId);
-        const comments = await db.deleteComments(imageId);
-
-        const image = await db.deletePost(imageId);
-
-        res.json({ success: true });
-    } catch (err) {
-        console.log("err in delete images: ", err);
-    }
+    res.json({ success: true });
+  } catch (err) {
+    console.log("err in delete images: ", err);
+  }
 });
 // app.post("/delete", (req, res) => {
 //     const { id } = req.body;
@@ -265,7 +209,7 @@ app.post("/delete/:imageId", async (req, res) => {
 app.get("/*", (req, res) => res.redirect("/"));
 
 if (require.main == module) {
-    app.listen(process.env.PORT || 8080, () => {
-        console.log("Server is listening...");
-    });
+  app.listen(process.env.PORT || 8080, () => {
+    console.log("Server is listening...");
+  });
 }
