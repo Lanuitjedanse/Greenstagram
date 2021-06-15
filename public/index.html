@@ -41,12 +41,16 @@
        
 
         <div class="row-img-container">
-            <div class="container-img-box" v-for="each in images" :key="each.id">
+            <div class="container-img-box" v-for="each in images" :key="each.id" >
                 <div class="image-box">
                     <a :href="'#' + each.id">
                         <img class="picture" :src="each.url" :alt="each.description" :imageid="each.id">
                     </a>
+                    <div class="title-like"  >
                     <p class="title-img">{{each.title}}</p>
+                    
+                    <!-- <p @click="increaseLikes">&hearts; {{each.likes}}</p> -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,7 +62,8 @@
         <popup-modal
         v-if="selectedPost" 
         :id="selectedPost"
-        @close="closeModal">
+        @close="closeModal"
+        @delete="deletePost($event)">
         </popup-modal>
 
         <footer>
@@ -85,6 +90,7 @@
                 <div class="like-box">
                    <p class="caption">{{image.description}} posted by {{image.username}} on {{date}}</p>
                    <button class="like-btn" @click="increaseLikes">&hearts; {{likes}}</button> 
+                   <button @click="deletePost(id)">Delete</button>
                     
                 </div>
                 <div class="comment-modal-box">
@@ -102,7 +108,7 @@
                 <div class="comment-box">
                     <input class="username-comment" v-model="username" type="text" name="username" placeholder="Username">
                     <input class="username-comment"v-model="comment" type="text" name="comment" placeholder="Comment">
-                    <button class="submit-btn" @click="addComment">Submit comment</button>
+                    <button class="submit-btn" @click="addComment">Submit</button>
                     <!-- <button class="delete-btn" @click="deleteImage">Delete</button> -->
                 </div>
                

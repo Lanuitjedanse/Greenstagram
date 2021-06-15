@@ -270,6 +270,7 @@ h2 {
 .like-btn:focus {
     outline: none;
 }
+
 .like-btn:active {
     font-size: 21px;
     color: #eda1c1;
@@ -312,6 +313,11 @@ h2 {
 .username-comment:focus,
 .submit-btn:focus {
     outline: none;
+}
+
+.title-like {
+    display: flex;
+    justify-content: space-between;
 }
 
 @-webkit-keyframes brand-title {
@@ -363,7 +369,7 @@ h2 {
     }
 }
 
-@media screen and (min-width: 376px) and (max-width: 750px) {
+@media screen and (min-width: 300px) and (max-width: 750px) {
     .more-btn {
         align-items: flex-start;
     }
@@ -392,5 +398,44 @@ h2 {
     .title,
     .description {
         width: 300px;
+    }
+
+    .like-btn {
+        padding: 5px;
+        position: static;
+        color: black;
+    }
+
+    .overlay {
+        width: 100%;
+        height: 100%;
+    }
+
+    .pic-popup {
+        width: 90vw;
+        height: 50vh;
+
+        border-radius: 5px;
+    }
+
+    .layer-fade {
+        visibility: hidden;
+    }
+}
+
+@media screen and (min-width: 500px) and (max-width: 750px) {
+    .like-btn {
+        padding: 5px;
+        position: static;
+        color: black;
+    }
+
+    .pic-popup {
+        width: 95vw;
+        height: 50vh;
+    }
+
+    .layer-fade {
+        visibility: hidden;
     }
 }

@@ -1,10 +1,19 @@
 const spicedPg = require("spiced-pg");
 // const images = require("./images.sql");
 
-const { dbUsername, dbPassword } = require("./secrets");
-const db = spicedPg(
-    `postgres:${dbUsername}:${dbPassword}@localhost:5432/gallery`
-);
+let db;
+if (process.env.DATABASE_URL) {
+    db = spicedPg(process.env.DATABASE_URL);
+} else {
+    const { dbUsername, dbPass } = require("./secrets.json");
+    db = spicedPg(`postgres:${dbUsername}:${dbPass}@localhost:5432/gallery`);
+}
+
+module.exports.getImages = () => {
+    const q = `SELECT * FROM images ORDER BY id DESC LIMIT 6`;
+
+    return db.query(q);
+};
 
 module.exports.getImages = () => {
     const q = `SELECT * FROM images ORDER BY id DESC LIMIT 6`;
@@ -95,5 +104,44 @@ module.exports.addLike = (imageId) => {
 module.exports.countLikes = (imageId) => {
     const q = `SELECT COUNT (*) FROM likes WHERE image_id = $1`;
     const params = [imageId];
+    return db.query(q, params);
+};
+
+module.exports.getAllTotalLikes = () => {
+    const q = `SELECT image_id, COUNT(*) 
+            FROM likes 
+            GROUP BY image_id`;
+    return db.query(q);
+};
+
+module.exports.getLikes = () => {
+    const q = `SELECT image_id, COUNT(*) 
+            FROM likes
+            GROUP BY image_id 
+            ORDER BY image_id  DESC LIMIT 6`;
+    return db.query(q);
+};
+
+module.exports.deletePost = (postId) => {
+    const q = `DELETE FROM images WHERE id = $1`;
+    const params = [postId];
+    return db.query(q, params);
+};
+
+module.exports.deleteComments = (postId) => {
+    const q = `DELETE FROM comments WHERE image_id = $1`;
+    const params = [postId];
+    return db.query(q, params);
+};
+
+module.exports.deleteLikes = (postId) => {
+    const q = `DELETE FROM likes WHERE image_id = $1`;
+    const params = [postId];
+    return db.query(q, params);
+};
+
+module.exports.selectPost = (postId) => {
+    const q = `SELECT * FROM images WHERE id = $1`;
+    const params = [postId];
     return db.query(q, params);
 };
