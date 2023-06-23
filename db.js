@@ -1,8 +1,8 @@
 const spicedPg = require("spiced-pg");
 
 let db;
-if (process.env.DATABASE_URL) {
-  db = spicedPg(process.env.DATABASE_URL);
+if (process.env.POSTGRES_URL) {
+  db = spicedPg(process.env.POSTGRES_URL);
 } else {
   const { DB_USERNAME, DB_PASS } = require("./secrets.json");
   db = spicedPg(
