@@ -167,25 +167,6 @@
             console.log("error add comment axios: ", err);
           });
       },
-
-      // deleteImage: function () {
-      //     this.selectedPost = null;
-      //     var self = this;
-
-      //     axios
-      //         .get("/delete", self.id)
-      //         .then(function () {
-      //             for (var i = 0; i < self.images.length; i++) {
-      //                 if (self.images[i].id === self.id) {
-      //                     self.images.splice(i, 1);
-      //                     break;
-      //                 }
-      //             }
-      //         })
-      //         .catch(function (err) {
-      //             console.log("err in delete image: ", err);
-      //         });
-      // },
     },
   });
 

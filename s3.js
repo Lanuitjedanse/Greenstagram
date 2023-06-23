@@ -22,7 +22,7 @@ exports.upload = (req, res, next) => {
 
   const promise = s3
     .putObject({
-      Bucket: "lucie-imageboard",
+      Bucket: "greenstagram",
       ACL: "public-read",
       Key: filename,
       Body: fs.createReadStream(path),
@@ -45,7 +45,7 @@ exports.upload = (req, res, next) => {
 
   exports.deleteImage = (filename) => {
     s3.deleteObject({
-      Bucket: "lucie-imageboard",
+      Bucket: "greenstagram",
       Key: filename.substr(42),
     })
       .promise()

@@ -4,24 +4,25 @@ const db = require("./db");
 const s3 = require("./s3");
 const config = require("./config");
 const basicAuth = require("basic-auth");
+
 //middleware uploader
 const { uploader } = require("./upload");
 exports.app = app;
 
-let basicUser;
-let basicPass;
+let BASIC_USER;
+let BASIC_PASS;
 if (process.env.NODE_ENV == "production") {
-  basicUser = process.env.basicUser;
-  basicPass = process.env.basicPass;
+  BASIC_USER = process.env.BASIC_USER;
+  BASIC_PASS = process.env.BASIC_PASS;
 } else {
   const secrets = require("./secrets");
-  basicUser = secrets.basicUser;
-  basicPass = secrets.basicPass;
+  BASIC_USER = secrets.BASIC_USER;
+  BASIC_PASS = secrets.BASIC_PASS;
 }
 
 const auth = function (req, res, next) {
   const creds = basicAuth(req);
-  if (!creds || creds.name != basicUser || creds.pass != basicPass) {
+  if (!creds || creds.name != BASIC_USER || creds.pass != BASIC_PASS) {
     res.setHeader(
       "WWW-Authenticate",
       'Basic realm="Enter your credentials to see this stuff."'
@@ -209,7 +210,7 @@ app.post("/delete/:imageId", async (req, res) => {
 app.get("/*", (req, res) => res.redirect("/"));
 
 if (require.main == module) {
-  app.listen(process.env.PORT || 8080, () => {
-    console.log("Server is listening...");
+  app.listen(process.env.PORT || 3000, () => {
+    console.log("Server is listening on port...");
   });
 }
